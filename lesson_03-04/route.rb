@@ -5,7 +5,7 @@ class Route
     @first_station = first_station
     @last_station = last_station
     @way_stations = []
-    puts "Маршрут #{stations.join('-->')} создан!"
+    puts "Маршрут #{@first_station.name}--#{@last_station.name} создан!"
   end
 
   def add_station(station)

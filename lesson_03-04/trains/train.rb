@@ -56,12 +56,12 @@ class Train
 
   def move_next
     move_next!(self) if next_station!
-    puts "Поезд приехал на станцию #{previous_station!.name}"
+    puts "Поезд приехал на станцию #{current_station!.name}"
   end
 
   def move_prev
     move_prev!(self) if previous_station!
-    puts "Поезд приехал на станцию #{previous_station!.name}"
+    puts "Поезд приехал на станцию #{current_station!.name}"
   end
 
   private # Инкапсуляция
