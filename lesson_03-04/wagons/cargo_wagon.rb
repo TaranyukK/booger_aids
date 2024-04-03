@@ -1,7 +1,8 @@
 class CargoWagon < Wagon
+  attr_reader :type
 
-  def initialize(number, type = 1)
-    super(number, type)
-    puts "Грузовой вагон с номером: #{number} создан!"
+  def initialize(number)
+    @type = :cargo
+    super
   end
 end
