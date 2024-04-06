@@ -1,3 +1,7 @@
+require_relative 'modules/manufactor'
+require_relative 'modules/constant'
+require_relative 'modules/helper'
+require_relative 'modules/instance_counter'
 require_relative 'station'
 require_relative 'route'
 require_relative 'trains/train'
@@ -8,6 +12,9 @@ require_relative 'wagons/passenger_wagon'
 require_relative 'wagons/cargo_wagon'
 
 class RealRailways
+  include Constant
+  include Helper
+
   attr_reader :stations, :routes, :trains, :wagons
 
   def initialize
@@ -90,8 +97,6 @@ class RealRailways
 
   private
 
-  MENU = ['База поездов', 'База маршрутов и станций', 'Список станций и поездов', 'Выход'].freeze
-
   def menu
     show_items(MENU)
     get_answer_i
@@ -112,8 +117,6 @@ class RealRailways
       end
     end
   end
-
-  TRAINS_MENU = ['Создать поезд', 'Выбрать поезд', 'В главное меню'].freeze
 
   def all_trains_menu
     show_items(TRAINS_MENU)
@@ -141,15 +144,6 @@ class RealRailways
     end
   end
 
-  TRAINS_CONFIGURE_MENU = [
-    'Добавить вагон в поезд',
-    'Удалить вагон из поезда',
-    'Назначить маршрут поезду',
-    'Переместить поезд вперед',
-    'Переместить поезд назад',
-    'В главное меню'
-  ].freeze
-
   def trains_configure_menu
     show_items(TRAINS_CONFIGURE_MENU)
     get_answer_i
@@ -175,15 +169,6 @@ class RealRailways
       end
     end
   end
-
-  ROUTES_AND_STATIONS_MENU = [
-    'Создать станцию',
-    'Создать маршрут',
-    'Добавить станцию в маршрут',
-    'Удалить станцию из маршрута',
-    'Посмотреть все маршруты и станции',
-    'В главное меню'
-  ].freeze
 
   def routes_and_stations_menu
     show_items(ROUTES_AND_STATIONS_MENU)
@@ -338,26 +323,5 @@ class RealRailways
 
   def all_stations(stations = self.stations)
     stations.each_with_index { |station, index | puts "#{index}. №#{station.name}" }
-  end
-
-  # helpers
-  def show_items(items)
-    items.each_with_index { |item, index| puts "#{index+1}. #{item}" }
-  end
-
-  def get_answer
-    gets.chomp
-  end
-
-  def get_answer_i
-    gets.to_i
-  end
-
-  def wrong_attribute
-    'Неверное значение, попробуйте еще раз!'
-  end
-
-  def delimiter
-    '--------------------------------------'
   end
 end

@@ -1,4 +1,6 @@
 class Wagon
+  include Manufactor
+
   attr_reader :number
 
   def initialize(number)

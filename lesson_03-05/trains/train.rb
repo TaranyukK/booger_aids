@@ -1,10 +1,23 @@
 class Train
+  include Manufactor
+  include InstanceCounter
+
   attr_reader :number, :type, :wagons, :speed, :route
+
+  class << self
+    attr_reader :trains
+  end
+
+  def self.find(number)
+    @trains[number]
+  end
 
   def initialize(number)
     @number = number
     @wagons = []
     @speed = 0
+    self.class.trains[number] = self
+    self.register_instance
   end
 
   def move(speed)
@@ -53,8 +66,8 @@ class Train
 
   private # Инкапсуляция
 
-  attr_accessor :current_index # Пользователю не нужна эта информация
-  attr_writer :speed, :route # Запрещаем пользователю напрямую менять атрибуты
+  attr_accessor :current_index
+  attr_writer :speed, :route
 
   def move!(speed)
     self.speed = speed
