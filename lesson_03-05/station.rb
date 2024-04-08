@@ -1,5 +1,6 @@
 class Station
   include InstanceCounter
+  include Validation
 
   attr_reader :name, :trains
 
@@ -12,6 +13,7 @@ class Station
   def initialize(name)
     @name = name
     @trains = []
+    validate!
     @@stations << self
     self.register_instance
   end
@@ -26,5 +28,10 @@ class Station
 
   def train_departure(train)
     trains.delete(train)
+  end
+
+  private
+  def validate!
+    raise 'Длинна названия должна быть минимум 5 символов!' if name.length < 5
   end
 end

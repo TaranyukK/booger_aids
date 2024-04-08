@@ -1,8 +1,11 @@
 class Train
   include Manufactor
   include InstanceCounter
+  include Validation
 
   attr_reader :number, :type, :wagons, :speed, :route
+
+  NUMBER_FORMAT = /^[a-z0-9]{3}(-[a-z0-9]{2})?$/i
 
   class << self
     attr_reader :trains
@@ -16,6 +19,7 @@ class Train
     @number = number
     @wagons = []
     @speed = 0
+    validate!
     self.class.trains[number] = self
     self.register_instance
   end
@@ -106,5 +110,10 @@ class Train
 
   def wagon_suitable?(wagon)
     self.type == wagon.type
+  end
+
+  def validate!
+    raise 'Длинна номера должна быть минимум 3 символа!' if number.length < 3
+    raise 'Неверный формат номера!' if number !~ NUMBER_FORMAT
   end
 end

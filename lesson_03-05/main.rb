@@ -1,6 +1,7 @@
 require_relative 'modules/manufactor'
 require_relative 'modules/constant'
 require_relative 'modules/helper'
+require_relative 'modules/validation'
 require_relative 'modules/instance_counter'
 require_relative 'station'
 require_relative 'route'
@@ -46,8 +47,7 @@ class RealRailways
   def seed
     #stations
     print 'Stations...'
-    10.times { stations << Station.new(rand(1000)) }
-    sleep(1)
+    10.times { stations << Station.new(rand(10_000..99_999).to_s) }
     puts 'OK'
 
     #routes
@@ -57,41 +57,37 @@ class RealRailways
       (rand(3..7)).times { route.add_station(stations.sample) }
       routes << route
     end
-    sleep(1)
     puts 'OK'
 
     #pass trains
     print 'Passenger trains...'
     10.times do
-      train = PassengerTrain.new(rand(1000))
+      train = PassengerTrain.new(rand(100..1000).to_s)
       train.take_route(routes.sample)
       stations.sample.train_arrival(train)
       trains << train
     end
-    sleep(1)
     puts 'OK'
 
     #cargo trains
     print 'Cargo trains...'
     10.times do
-      train = CargoTrain.new(rand(1000))
+      train = CargoTrain.new(rand(100..1000).to_s)
       train.take_route(routes.sample)
       stations.sample.train_arrival(train)
       trains << train
     end
-    sleep(1)
     puts 'OK'
 
     #wagons
     print 'Wagons...'
     trains.each do |train|
       if train.type == :passenger
-        10.times { train.add_wagon(PassengerWagon.new(rand(1000))) }
+        10.times { train.add_wagon(PassengerWagon.new(rand(10_000..99_999).to_s)) }
       else
-        10.times { train.add_wagon(CargoWagon.new(rand(1000))) }
+        10.times { train.add_wagon(CargoWagon.new(rand(10_000..99_999).to_s)) }
       end
     end
-    sleep(1)
     puts 'OK'
   end
 
@@ -205,6 +201,10 @@ class RealRailways
         puts wrong_attribute
       end
     end
+    puts "Создан поезд №#{train_number}"
+  rescue ArgumentError => e
+    puts e.message
+    retry
   end
 
   def choose_train
