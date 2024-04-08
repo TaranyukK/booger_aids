@@ -68,6 +68,14 @@ class Train
     move_prev! if previous_station!
   end
 
+  def each_wagon(&block)
+    wagons.each(&block) if block_given?
+  end
+
+  def passenger?
+    self.type == :passenger
+  end
+
   private # Инкапсуляция
 
   attr_accessor :current_index

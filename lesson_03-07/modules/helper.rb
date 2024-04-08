@@ -18,4 +18,8 @@ module Helper
   def delimiter
     '--------------------------------------'
   end
+
+  def bold_delimiter
+    '======================================'
+  end
 end

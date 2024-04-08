@@ -27,6 +27,6 @@ class Route
 
   private
   def validate!
-    raise 'Начальная и конечная станция не могут совпадать' if first_station == last_station
+    # raise 'Начальная и конечная станция не могут совпадать' if first_station == last_station
   end
 end

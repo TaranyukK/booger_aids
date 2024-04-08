@@ -30,6 +30,10 @@ class Station
     trains.delete(train)
   end
 
+  def each_train(&block)
+    trains.each(&block) if block_given?
+  end
+
   private
   def validate!
     raise 'Длинна названия должна быть минимум 5 символов!' if name.length < 5
