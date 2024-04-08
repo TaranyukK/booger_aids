@@ -186,25 +186,26 @@ class RealRailways
   # action methods
   def create_train
     puts 'Создание поезда'
-    puts 'Введите номер поезда:'
-    train_number = get_answer
     loop do
-      puts 'Введите тип поезда 1 - пассажирский, 2 - грузовой'
-      case get_answer_i
-      when 1
-        trains << PassengerTrain.new(train_number)
+      begin
+        puts 'Введите номер поезда:'
+        train_number = get_answer
+        puts 'Введите тип поезда 1 - пассажирский, 2 - грузовой'
+        case get_answer_i
+        when 1
+          trains << PassengerTrain.new(train_number)
+        when 2
+          trains << CargoTrain.new(train_number)
+        else
+          puts wrong_attribute
+        end
+        puts "Создан поезд №#{train_number}"
         return
-      when 2
-        trains << CargoTrain.new(train_number)
-        return
-      else
-        puts wrong_attribute
+      rescue RuntimeError => e
+        puts e.message
+        retry
       end
     end
-    puts "Создан поезд №#{train_number}"
-  rescue ArgumentError => e
-    puts e.message
-    retry
   end
 
   def choose_train
@@ -325,3 +326,7 @@ class RealRailways
     stations.each_with_index { |station, index | puts "#{index}. №#{station.name}" }
   end
 end
+
+rr = RealRailways.new
+
+rr.start
