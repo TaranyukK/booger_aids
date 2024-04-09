@@ -1,7 +1,7 @@
 module Validation
   def valid?
-    self.validate!
-  rescue
+    validate!
+  rescue StandardError
     false
   end
 end

@@ -10,7 +10,7 @@ class Route
     @way_stations = []
     puts "1 - #{first_station.name}; 2 - #{last_station.name}"
     validate!
-    self.register_instance
+    register_instance
   end
 
   def add_station(station)
@@ -26,6 +26,7 @@ class Route
   end
 
   private
+
   def validate!
     # raise 'Начальная и конечная станция не могут совпадать' if first_station == last_station
   end

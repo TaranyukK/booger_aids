@@ -17,9 +17,10 @@ class PassengerWagon < Wagon
   end
 
   private
+
   attr_writer :free_seats
 
   def take_seat!
-    self.free_seats -= 1 if free_seats > 0
+    self.free_seats -= 1 if free_seats.positive?
   end
 end

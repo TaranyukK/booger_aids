@@ -14,7 +14,7 @@ module Constant
     'В главное меню'
   ].freeze
 
-  WAGON_CONFIGURE_MENU = [{passenger: 'Занять место', cargo: 'Заполнить объем'}, 'В главное меню'].freeze
+  WAGON_CONFIGURE_MENU = [{ passenger: 'Занять место', cargo: 'Заполнить объем' }, 'В главное меню'].freeze
 
   ROUTES_AND_STATIONS_MENU = [
     'Создать станцию',

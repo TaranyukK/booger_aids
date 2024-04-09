@@ -36,7 +36,7 @@ class RealRailways
       when 3
         stations_and_trains
       when 4
-        puts "До свидания!"
+        puts 'До свидания!'
         return
       else
         puts wrong_attribute
@@ -45,42 +45,33 @@ class RealRailways
   end
 
   def seed
-    #stations
-    print 'Stations...'
+    # stations
     10.times { stations << Station.new(rand(10_000..99_999).to_s) }
-    puts 'OK'
 
-    #routes
-    print 'Routes...'
+    # routes
     20.times do
       route = Route.new(stations.sample, stations.sample)
-      (rand(3..7)).times { route.add_station(stations.sample) }
+      rand(3..7).times { route.add_station(stations.sample) }
       routes << route
     end
-    puts 'OK'
 
-    #pass trains
-    print 'Passenger trains...'
+    # pass trains
     10.times do
       train = PassengerTrain.new(rand(100..1000).to_s)
       train.take_route(routes.sample)
       stations.sample.train_arrival(train)
       trains << train
     end
-    puts 'OK'
 
-    #cargo trains
-    print 'Cargo trains...'
+    # cargo trains
     10.times do
       train = CargoTrain.new(rand(100..1000).to_s)
       train.take_route(routes.sample)
       stations.sample.train_arrival(train)
       trains << train
     end
-    puts 'OK'
 
-    #wagons
-    print 'Wagons...'
+    # wagons
     trains.each do |train|
       if train.passenger?
         10.times { train.add_wagon(PassengerWagon.new(rand(10_000..99_999).to_s, rand(10..50))) }
@@ -95,7 +86,7 @@ class RealRailways
 
   def menu
     show_items(MENU)
-    get_answer_i
+    answer_i
   end
 
   def all_trains
@@ -116,7 +107,7 @@ class RealRailways
 
   def all_trains_menu
     show_items(TRAINS_MENU)
-    get_answer_i
+    answer_i
   end
 
   def trains_configure(train)
@@ -147,7 +138,7 @@ class RealRailways
 
   def trains_configure_menu
     show_items(TRAINS_CONFIGURE_MENU)
-    get_answer_i
+    answer_i
   end
 
   def routes_and_stations
@@ -173,7 +164,7 @@ class RealRailways
 
   def routes_and_stations_menu
     show_items(ROUTES_AND_STATIONS_MENU)
-    get_answer_i
+    answer_i
   end
 
   def wagon_configure(wagon)
@@ -184,7 +175,7 @@ class RealRailways
           wagon.take_seat
         else
           puts 'Введите объем'
-          value = get_answer_i
+          value = answer_i
           wagon.fill_space(value)
         end
       when 2
@@ -198,21 +189,21 @@ class RealRailways
   def wagon_configure_menu(wagon)
     puts "1. #{WAGON_CONFIGURE_MENU.first[wagon.type]}"
     puts "2. #{WAGON_CONFIGURE_MENU.last}"
-    get_answer_i
+    answer_i
   end
 
   def stations_and_trains
     stations.each do |station|
       puts "Станция: #{station.name}"
-      unless station.trains.empty?
+      if station.trains.empty?
+        puts 'У станции нет поездов!'
+      else
         puts 'Поезда:'
         station.each_train do |train|
           puts "№#{train.number} - тип: #{train.type}, количество вагонов: #{train.wagons.length}"
           show_wagons(train)
           puts delimiter
         end
-      else
-        puts 'У станции нет поездов!'
       end
       puts bold_delimiter
     end
@@ -222,41 +213,43 @@ class RealRailways
   def create_train
     puts 'Создание поезда'
     loop do
-      begin
-        puts 'Введите номер поезда:'
-        train_number = get_answer
-        puts 'Введите тип поезда 1 - пассажирский, 2 - грузовой'
-        case get_answer_i
-        when 1
-          trains << PassengerTrain.new(train_number)
-        when 2
-          trains << CargoTrain.new(train_number)
-        else
-          puts wrong_attribute
-        end
-        puts "Создан поезд №#{train_number}"
-        return
-      rescue RuntimeError => e
-        puts e.message
-        retry
+      puts 'Введите номер поезда:'
+      train_number = answer
+      puts 'Введите тип поезда 1 - пассажирский, 2 - грузовой'
+      case answer_i
+      when 1
+        trains << PassengerTrain.new(train_number)
+      when 2
+        trains << CargoTrain.new(train_number)
+      else
+        puts wrong_attribute
       end
+      puts "Создан поезд №#{train_number}"
+      return
+    rescue RuntimeError => e
+      puts e.message
+      retry
     end
   end
 
   def choose_train
     puts 'Выберите поезд:'
-    trains.each_with_index { |train, index| puts "#{index}. #{train.passenger? ? 'Пассажирский' : 'Грузовой'} поезд №#{train.number}" }
+    trains.each_with_index do |train, index|
+      puts "#{index}. #{train.passenger? ? 'Пассажирский' : 'Грузовой'} поезд №#{train.number}"
+    end
     loop do
-      answer = get_answer_i
+      answer = answer_i
       trains[answer] ? (return trains[answer]) : (puts wrong_attribute)
     end
   end
 
   def choose_wagon(train)
     puts 'Выберите вагон:'
-    train.wagons.each_with_index { |wagon, index| puts "#{index}. Вагон №#{wagon.number} - свободно: #{wagon.passenger? ? wagon.free_seats : wagon.free_space}" }
+    train.wagons.each_with_index do |wagon, index|
+      puts "#{index}. Вагон №#{wagon.number} - свободно: #{wagon.passenger? ? wagon.free_seats : wagon.free_space}"
+    end
     loop do
-      answer = get_answer_i
+      answer = answer_i
       train.wagons[answer] ? (return train.wagons[answer]) : (puts wrong_attribute)
     end
   end
@@ -265,7 +258,7 @@ class RealRailways
     puts 'Выберите маршрут:'
     routes.each_with_index { |route, index| puts "#{index}. #{route.first_station.name}--#{route.last_station.name}" }
     loop do
-      answer = get_answer_i
+      answer = answer_i
       routes[answer] ? (return routes[answer]) : (puts wrong_attribute)
     end
   end
@@ -273,27 +266,25 @@ class RealRailways
   def add_wagon_to_train(train)
     puts 'Создание вагона'
     loop do
-      begin
-        puts 'Введите номер вагона:'
-        wagon_number = get_answer
-        new_wagon = case train.type
-        when :passenger
-          puts 'Введите количество мест:'
-          seats = get_answer_i
-          PassengerWagon.new(wagon_number, seats)
-        else
-          puts 'Введите объем:'
-          volume = get_answer_i
-          CargoWagon.new(wagon_number, volume)
-        end
-        wagons << new_wagon
-        train.wagons << new_wagon
-        puts "Создан вагон №#{wagon_number}"
-        return
-      rescue RuntimeError => e
-        puts e.message
-        retry
-      end
+      puts 'Введите номер вагона:'
+      wagon_number = answer
+      new_wagon = case train.type
+                  when :passenger
+                    puts 'Введите количество мест:'
+                    seats = answer_i
+                    PassengerWagon.new(wagon_number, seats)
+                  else
+                    puts 'Введите объем:'
+                    volume = answer_i
+                    CargoWagon.new(wagon_number, volume)
+                  end
+      wagons << new_wagon
+      train.wagons << new_wagon
+      puts "Создан вагон №#{wagon_number}"
+      return
+    rescue RuntimeError => e
+      puts e.message
+      retry
     end
   end
 
@@ -303,14 +294,14 @@ class RealRailways
   end
 
   def add_route_to_train(train)
-    route  = choose_route
+    route = choose_route
     train.take_route(route)
   end
 
   def create_station
     puts 'Создание станции'
     puts 'Введите название станции:'
-    station_name = get_answer.chomp
+    station_name = answer.chomp
     stations << Station.new(station_name)
   end
 
@@ -318,9 +309,9 @@ class RealRailways
     puts 'Создание машрута'
     all_stations
     puts 'Введите начальную станцию:'
-    first_station = get_answer_i
+    first_station = answer_i
     puts 'Введите конечную станцию:'
-    last_station = get_answer_i
+    last_station = answer_i
     if stations[first_station] && stations[last_station]
       routes << Route.new(stationss[first_station], stations[last_station])
     else
@@ -332,12 +323,12 @@ class RealRailways
     puts 'Выберите маршрут'
     routes.each_with_index { |route, index| puts "#{index}. #{route.first_station.name} -- #{route.last_station.name}" }
     loop do
-      answer = get_answer_i
+      answer = answer_i
       if routes[answer]
         route = routes[answer]
         puts 'Выберите станцию для добавления:'
         all_stations(stations - route.stations)
-        station_index = get_answer_i
+        station_index = answer_i
         route.add_station(route.stations[station_index])
       else
         puts wrong_attribute
@@ -349,13 +340,13 @@ class RealRailways
     puts 'Выберите маршрут'
     routes.each_with_index { |route, index| puts "#{index}. #{route.first_station.name} -- #{route.last_station.name}" }
     loop do
-      answer = get_answer_i
+      answer = answer_i
       if routes[answer]
         route = routes[answer]
         puts 'Выберите станцию для удаления:'
         all_stations(route.stations)
-        station_index = get_answer_i
-        if route.stations[stations_index]
+        station_index = answer_i
+        if route.stations[station_index]
           route.remove_station(route.stations[stations_index])
           return
         else
@@ -377,7 +368,7 @@ class RealRailways
   end
 
   def all_stations(stations = self.stations)
-    stations.each_with_index { |station, index | puts "#{index}. №#{station.name}" }
+    stations.each_with_index { |station, index| puts "#{index}. №#{station.name}" }
   end
 
   def show_wagons(train)

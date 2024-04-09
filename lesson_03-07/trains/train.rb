@@ -5,7 +5,7 @@ class Train
 
   attr_reader :number, :type, :wagons, :speed, :route
 
-  NUMBER_FORMAT = /^[a-z0-9]{3}(-[a-z0-9]{2})?$/i
+  NUMBER_FORMAT = /^[a-z0-9]{3}(-[a-z0-9]{2})?$/i.freeze
 
   class << self
     attr_reader :trains
@@ -21,7 +21,7 @@ class Train
     @speed = 0
     validate!
     self.class.trains[number] = self
-    self.register_instance
+    register_instance
   end
 
   def move(speed)
@@ -34,12 +34,14 @@ class Train
 
   def add_wagon(wagon)
     return unless wagon_suitable?(wagon)
+
     wagons << wagon if speed.zero?
   end
 
   def remove_wagon(wagon)
     return unless wagon_suitable?(wagon)
-    wagons.delete(wagon) if speed.zero? && !(wagons.empty?)
+
+    wagons.delete(wagon) if speed.zero? && !wagons.empty?
   end
 
   def take_route(route)
@@ -49,15 +51,15 @@ class Train
   end
 
   def current_station
-    return unless current_station!
+    nil unless current_station!
   end
 
   def next_station
-    return unless next_station!
+    nil unless next_station!
   end
 
   def previous_station
-    return unless previous_station!
+    nil unless previous_station!
   end
 
   def move_next
@@ -73,7 +75,7 @@ class Train
   end
 
   def passenger?
-    self.type == :passenger
+    type == :passenger
   end
 
   private # Инкапсуляция
@@ -91,16 +93,19 @@ class Train
 
   def current_station!
     return unless route
+
     route.stations[current_index]
   end
 
   def next_station!
     return unless route
+
     route.stations[current_index + 1]
   end
 
   def previous_station!
     return unless route && current_index.positive?
+
     route.stations[current_index - 1]
   end
 
@@ -117,7 +122,7 @@ class Train
   end
 
   def wagon_suitable?(wagon)
-    self.type == wagon.type
+    type == wagon.type
   end
 
   def validate!

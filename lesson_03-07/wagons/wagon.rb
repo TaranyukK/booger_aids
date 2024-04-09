@@ -10,10 +10,11 @@ class Wagon
   end
 
   def passenger?
-    self.type == :passenger
+    type == :passenger
   end
 
   private
+
   def validate!
     raise 'Длинна номера должна быть минимум 5 символов!' if number.length < 5
   end

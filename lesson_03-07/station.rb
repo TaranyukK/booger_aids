@@ -15,7 +15,7 @@ class Station
     @trains = []
     validate!
     @@stations << self
-    self.register_instance
+    register_instance
   end
 
   def train_arrival(train)
@@ -35,6 +35,7 @@ class Station
   end
 
   private
+
   def validate!
     raise 'Длинна названия должна быть минимум 5 символов!' if name.length < 5
   end

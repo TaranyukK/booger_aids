@@ -17,9 +17,10 @@ class CargoWagon < Wagon
   end
 
   private
+
   attr_writer :free_space
 
   def free_space!(volume)
-    self.free_space -= volume if free_space > 0
+    self.free_space -= volume if free_space.positive?
   end
 end

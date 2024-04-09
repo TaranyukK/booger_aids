@@ -1,13 +1,13 @@
 module Helper
   def show_items(items)
-    items.each_with_index { |item, index| puts "#{index+1}. #{item}" }
+    items.each_with_index { |item, index| puts "#{index + 1}. #{item}" }
   end
 
-  def get_answer
+  def answer
     gets.chomp
   end
 
-  def get_answer_i
+  def answer_i
     gets.to_i
   end
 
