@@ -29,10 +29,10 @@ module Helper
   end
 
   def delimiter
-    '--------------------------------------'
+    '-' * 40
   end
 
   def bold_delimiter
-    '======================================'
+    '=' * 40
   end
 end

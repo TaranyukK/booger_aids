@@ -1,10 +1,14 @@
 class Station
   include InstanceCounter
   include Validation
+  include Accessors
 
   attr_reader :name, :trains
 
   @@stations = []
+
+  validate :name, :presence
+  validate :name, :format, /^[a-z0-9]{5}$/i
 
   def self.all
     @@stations

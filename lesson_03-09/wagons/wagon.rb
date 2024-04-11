@@ -1,8 +1,12 @@
 class Wagon
   include Manufactor
   include Validation
+  include Accessors
 
   attr_reader :number
+
+  validate :number, :presence
+  validate :number, :format, /^[a-z0-9]{5}$/i
 
   def initialize(number)
     @number = number

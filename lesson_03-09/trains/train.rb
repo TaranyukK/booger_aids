@@ -2,10 +2,18 @@ class Train
   include Manufactor
   include InstanceCounter
   include Validation
+  include Accessors
 
   attr_reader :number, :type, :wagons, :speed, :route
 
   NUMBER_FORMAT = /^[a-z0-9]{3}(-[a-z0-9]{2})?$/i.freeze
+
+  validate :number, :presence
+  validate :number, :format, NUMBER_FORMAT
+
+  attr_accessor_with_history :speed
+
+  strong_attr_accessor :type, Symbol
 
   class << self
     attr_reader :trains

@@ -2,6 +2,7 @@ require_relative 'modules/manufactor'
 require_relative 'modules/constant'
 require_relative 'modules/helper'
 require_relative 'modules/validation'
+require_relative 'modules/accessor'
 require_relative 'modules/instance_counter'
 require_relative 'modules/seed'
 require_relative 'modules/menu'
@@ -95,7 +96,7 @@ class RealRailways
     choose_item(routes, 'маршрут') { |route| "#{route.first_station.name}--#{route.last_station.name}" }
   end
 
-  def choose_station
+  def choose_station(stations = self.stations)
     choose_item(stations, 'станцию') { |station| "Станция: #{station.name}" }
   end
 
@@ -161,10 +162,12 @@ class RealRailways
       answer = answer_i
       if routes[answer]
         route = routes[answer]
+        other_stations = stations - route.stations
         puts 'Выберите станцию для добавления:'
-        all_stations(stations - route.stations)
+        all_stations(other_stations)
         station_index = answer_i
-        route.add_station(route.stations[station_index])
+        route.add_station(other_stations[station_index])
+        break
       else
         puts wrong_attribute
       end
