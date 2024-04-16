@@ -59,7 +59,6 @@ class RealRailways
 
   private
 
-  # action methods
   def create_train
     puts 'Создание поезда'
     loop do

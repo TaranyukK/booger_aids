@@ -5,15 +5,17 @@ class Route
 
   attr_reader :first_station, :last_station, :way_stations
 
+  validate :first_station, :presence
   validate :first_station, :type, Station
+  validate :second_station, :presence
   validate :last_station, :type, Station
 
   def initialize(first_station, last_station)
     @first_station = first_station
     @last_station = last_station
     @way_stations = []
-    puts "1 - #{first_station.name}; 2 - #{last_station.name}"
     validate!
+    puts "1 - #{first_station.name}; 2 - #{last_station.name}"
     register_instance
   end
 
@@ -32,6 +34,7 @@ class Route
   private
 
   def validate!
-    # raise 'Начальная и конечная станция не могут совпадать' if first_station == last_station
+    raise 'Начальная станция не может быть пустой!' if first_station.nil?
+    raise 'Конечная станция не может быть пустой!' if last_station.nil?
   end
 end

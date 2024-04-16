@@ -20,7 +20,7 @@ module Accessors
     def strong_attr_accessor(attribute, type)
       define_method(attribute) { instance_variable_get("@#{attribute}") }
       define_method("#{attribute}=") do |value|
-        raise ArgumentError, "Invalid type. Expected #{type}, got #{value.class}" unless value.is_a?(type)
+        raise ArgumentError, "Недопустимый формат! Получен #{type}, ожидалось #{value.class}" unless value.is_a?(type)
 
         instance_variable_set("@#{attribute}", value)
       end

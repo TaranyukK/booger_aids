@@ -3,12 +3,18 @@ class Station
   include Validation
   include Accessors
 
+  NAME_FORMAT = /^[a-z0-9]{5}$/i.freeze
+
   attr_reader :name, :trains
 
-  @@stations = []
+  attr_accessor_with_history :name
+  strong_attr_accessor :name, String
 
   validate :name, :presence
-  validate :name, :format, /^[a-z0-9]{5}$/i
+  validate :name, :format, NAME_FORMAT
+  validate :name, :type, String
+
+  @@stations = []
 
   def self.all
     @@stations
@@ -41,6 +47,8 @@ class Station
   private
 
   def validate!
+    raise 'Название не может быть пустым!' if name.empty?
     raise 'Длинна названия должна быть минимум 5 символов!' if name.length < 5
+    raise 'Неверный формат номера!' if name !~ NAME_FORMAT
   end
 end

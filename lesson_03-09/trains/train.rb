@@ -4,16 +4,16 @@ class Train
   include Validation
   include Accessors
 
+  NUMBER_FORMAT = /^[a-z0-9]{3}(-[a-z0-9]{2})?$/i.freeze
+
   attr_reader :number, :type, :wagons, :speed, :route
 
-  NUMBER_FORMAT = /^[a-z0-9]{3}(-[a-z0-9]{2})?$/i.freeze
+  attr_accessor_with_history :number
+  strong_attr_accessor :number, String
 
   validate :number, :presence
   validate :number, :format, NUMBER_FORMAT
-
-  attr_accessor_with_history :speed
-
-  strong_attr_accessor :type, Symbol
+  validate :number, :type, String
 
   class << self
     attr_reader :trains
@@ -86,7 +86,7 @@ class Train
     type == :passenger
   end
 
-  private # Инкапсуляция
+  private
 
   attr_accessor :current_index
   attr_writer :speed, :route
@@ -134,6 +134,7 @@ class Train
   end
 
   def validate!
+    raise 'Номер не может быть пустым!' if number.empty?
     raise 'Длинна номера должна быть минимум 3 символа!' if number.length < 3
     raise 'Неверный формат номера!' if number !~ NUMBER_FORMAT
   end
