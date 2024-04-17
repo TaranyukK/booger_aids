@@ -75,7 +75,7 @@ class RealRailways
       end
       puts "Создан поезд №#{train_number}"
       return
-    rescue RuntimeError => e
+    rescue => e
       puts e.message
       retry
     end
@@ -118,7 +118,7 @@ class RealRailways
       train.wagons << new_wagon
       puts "Создан вагон №#{wagon_number}"
       return
-    rescue RuntimeError => e
+    rescue => e
       puts e.message
       retry
     end

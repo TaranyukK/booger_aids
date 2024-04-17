@@ -15,7 +15,9 @@ module Validation
 
   module InstanceMethods
     def validate!
-      self.class.validations.each do |validation|
+      src = self.class.superclass == Object ? self.class : self.class.superclass
+
+      src.validations.each do |validation|
         value = instance_variable_get("@#{validation[:attr_name]}")
         send(validation[:validation_type].to_sym, validation[:attr_name], value, *validation[:args])
       end
@@ -30,7 +32,7 @@ module Validation
 
     private
 
-    def presence(attr_name, value, *)
+    def presence(attr_name, value)
       raise ArgumentError, "#{attr_name.capitalize} не может быть пустым!" if value.nil? || value.empty?
     end
 
