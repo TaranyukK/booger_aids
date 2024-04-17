@@ -3,8 +3,11 @@ class CargoTrain < Train
 
   @trains = {}
 
+  validate :number, :presence
+  validate :number, :format, NUMBER_FORMAT
+
   def initialize(number)
-    @type = :cargo
     super
+    @type = :cargo
   end
 end

@@ -12,15 +12,13 @@ class Train
   strong_attr_accessor :number, String
 
   validate :number, :presence
-  validate :number, :format, NUMBER_FORMAT
-  validate :number, :type, String
 
   class << self
     attr_reader :trains
-  end
 
-  def self.find(number)
-    @trains[number]
+    def find(number)
+      @trains[number]
+    end
   end
 
   def initialize(number)
@@ -131,11 +129,5 @@ class Train
 
   def wagon_suitable?(wagon)
     type == wagon.type
-  end
-
-  def validate!
-    raise 'Номер не может быть пустым!' if number.empty?
-    raise 'Длинна номера должна быть минимум 3 символа!' if number.length < 3
-    raise 'Неверный формат номера!' if number !~ NUMBER_FORMAT
   end
 end

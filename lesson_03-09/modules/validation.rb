@@ -5,20 +5,19 @@ module Validation
   end
 
   module ClassMethods
+    attr_accessor :validations
+
     def validate(attr_name, validation_type, *args)
       @validations ||= []
       @validations << { attr_name: attr_name, validation_type: validation_type, args: args }
-    end
-
-    def validations
-      @validations || []
     end
   end
 
   module InstanceMethods
     def validate!
       self.class.validations.each do |validation|
-        send(validation[:validation_type], validation[:attr_name], *validation[:args])
+        value = instance_variable_get("@#{validation[:attr_name]}")
+        send(validation[:validation_type].to_sym, validation[:attr_name], value, *validation[:args])
       end
     end
 
@@ -31,19 +30,16 @@ module Validation
 
     private
 
-    def presence(attr_name, *)
-      value = instance_variable_get("@#{attr_name}")
-      raise "#{attr_name.capitalize} не может быть пустым!" if value.nil? || value.empty?
+    def presence(attr_name, value, *)
+      raise ArgumentError, "#{attr_name.capitalize} не может быть пустым!" if value.nil? || value.empty?
     end
 
-    def format(attr_name, regex)
-      value = instance_variable_get("@#{attr_name}")
-      raise "#{attr_name.capitalize} имеет недопустимый формат!" unless value =~ regex
+    def format(attr_name, value, regex)
+      raise ArgumentError, "#{attr_name.capitalize} имеет недопустимый формат!" unless value =~ regex
     end
 
-    def type(attr_name, expected_class)
-      value = instance_variable_get("@#{attr_name}")
-      raise "#{attr_name.capitalize} имеет неверный тип!" unless value.is_a?(expected_class)
+    def type(attr_name, value, expected_class)
+      raise ArgumentError, "#{attr_name.capitalize} имеет неверный тип!" unless value.is_a?(expected_class)
     end
   end
 end
