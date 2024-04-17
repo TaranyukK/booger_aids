@@ -11,8 +11,6 @@ class Train
   attr_accessor_with_history :number
   strong_attr_accessor :number, String
 
-  validate :number, :presence
-
   class << self
     attr_reader :trains
 
